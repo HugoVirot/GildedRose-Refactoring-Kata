@@ -8,53 +8,61 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals("Aged Brie")
-                    && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                if (items[i].quality > 0) {
-                    if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                        items[i].quality = items[i].quality - 1;
-                    }
-                }
-            } else {
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
+        // for (int i = 0; i < items.length; i++) {   = syntaxe améliorée ci-dessous
+        for (Item item : items) {
+            // si l'item est sulfuras, on n'exécute pas le code contenu dans la boucle for
+            if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
+                item.sellIn--;       // on baisse le sellIn de l'item (pareil pour tous sauf sulfuras)
 
-                    if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                items[i].sellIn = items[i].sellIn - 1;
-            }
-
-            if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Aged Brie")) {
-                    if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (items[i].quality > 0) {
-                            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                                items[i].quality = items[i].quality - 1;
-                            }
-                        }
+                // cas des places de concert
+                if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+                    if (item.sellIn > 10) {
+                        item.quality++;
+                    } else if (item.sellIn > 5) {
+                        item.quality += 2;
+                    } else if (item.sellIn >= 0) {
+                        item.quality += 3;
                     } else {
-                        items[i].quality = items[i].quality - items[i].quality;
+                        item.quality = 0;
                     }
+
+                    // tous items hors places de concert et sulfuras
                 } else {
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
+
+                    // modif qualité du brie
+                    if (item.name.equals("Aged Brie")) {
+                        if (item.sellIn >= 0) {
+                            item.quality++;
+                        } else {
+                            item.quality += 2;
+                        }
                     }
+
+                    // modif qualité Conjured Mana Cake
+                    else if (item.name.equals("Conjured Mana Cake")) {
+                        if (item.sellIn >= 0) {
+                            item.quality -= 2;
+                        } else {
+                            item.quality -= 4;
+                        }
+                    }
+
+                    // modif qualité autres items
+                    else {
+                        if (item.sellIn < 0) {
+                            item.quality -= 2;
+                        } else {
+                            item.quality--;
+                        }
+                        // ajustement à 0 si qualité négative
+                        if (item.quality < 0) {
+                            item.quality = 0;
+                        }
+                    }
+                }
+                // ajustement à 50 si qualité supérieure
+                if (item.quality > 50) {
+                    item.quality = 50;
                 }
             }
         }
