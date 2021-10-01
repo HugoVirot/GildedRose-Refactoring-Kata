@@ -8,7 +8,7 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        // for (int i = 0; i < items.length; i++) {   = syntaxe améliorée ci-dessous
+      //  for (int i = 0; i < items.length; i++) {   //= syntaxe améliorée ci-dessous
         for (Item item : items) {
             // si l'item est sulfuras, on n'exécute pas le code contenu dans la boucle for
             if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
@@ -39,7 +39,7 @@ class GildedRose {
                     }
 
                     // modif qualité Conjured Mana Cake
-                    else if (item.name.equals("Conjured Mana Cake")) {
+                    else if (item.name.contains("Conjured")) {
                         if (item.sellIn >= 0) {
                             item.quality -= 2;
                         } else {
@@ -54,12 +54,14 @@ class GildedRose {
                         } else {
                             item.quality--;
                         }
-                        // ajustement à 0 si qualité négative
-                        if (item.quality < 0) {
-                            item.quality = 0;
-                        }
+                    }
+
+                    // ajustement à 0 si qualité négative
+                    if (item.quality < 0) {
+                        item.quality = 0;
                     }
                 }
+
                 // ajustement à 50 si qualité supérieure
                 if (item.quality > 50) {
                     item.quality = 50;
